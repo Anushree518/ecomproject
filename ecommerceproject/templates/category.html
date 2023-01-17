@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to PET CARE website where you can Buy Medicines,Food Products and Accessories for your pets.
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{category.name}} - PETS CARE
+    {% else %}
+        See what we Provide - PETS CARE
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div>
+            <div class="row my_row_class ">
+                <div class="mx-auto">
+                    <p><a href="{% url 'shop:allProdCat' %}"> Pet Shop</a></p>
+            </div>
+                </div>
+        </div>
+    {% endif %}
+<div class="mx-auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}" height="500px" width="100%">
+</div><br>
+<div>
+    <h2 class="text-center my_title ">{{category.name}}</h2>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+        <div class="container-fluid">
+                 <img class="my_image_padding" src="{% static 'img/petban5.png' %}" alt=" Our Products" height="600px" width="100%">
+        </div><br>
+        <div>
+           <h2 class="text-center my_title">SOCIAL GROOMING </h2>
+            <p class="text-justify">A pet, or companion animal, is an animal kept primarily for a person's company or entertainment rather than as a working animal, livestock, or a laboratory animal. Popular pets are often considered to have attractive appearances, intelligence, and relatable personalities, but some pets may be taken in on an altruistic basis (such as a stray animal) and accepted by the owner regardless of these characteristics.</p>
+        </div>
+    {% endif %}
+<div class="container">
+    <div class="row mx-auto">
+        {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+                <div class="card text-center" style="min-width:18rem;">
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}" width="10%" height="10%"></a>
+                <div class="card-body">
+                    <h5>{{product.name}}</h5>
+                    <p>{{product.price}}</p>
+                </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg%} acive {% endif %}"> {{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
